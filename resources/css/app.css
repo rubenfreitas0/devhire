@@ -6,3 +6,36 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+.site-nav {
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    color: white;
+    border-bottom: 1px solid white/10;
+    space: x -6px;
+    font: bold 1rem/1.5 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+.site-logo {
+    height: 2.5rem;
+    width: auto;
+    display: block;
+}
+
+.site-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.background {
+    background-color: #060606;
+}
+
+.font-color {
+    color: white;
+}

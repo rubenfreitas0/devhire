@@ -1,0 +1,12 @@
+<svg width="300" height="80" viewBox="0 0 300 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <circle cx="40" cy="40" r="25" stroke="#2563EB" stroke-width="6"/>
+    <line x1="58" y1="58" x2="75" y2="75" stroke="#2563EB" stroke-width="6" stroke-linecap="round"/>
+    <path d="M28 30L40 50L52 30" stroke="#F97316" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="38" y1="25" x2="42" y2="55" stroke="#F97316" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <text x="90" y="52" font-family="Arial, sans-serif" font-weight="bold" font-size="32" fill="#1E293B">
+    Dev<tspan fill="#2563EB">Hire</tspan>
+  </text>
+</svg>
