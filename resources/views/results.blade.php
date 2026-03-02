@@ -40,13 +40,18 @@
 
                     @auth
                         @if (auth()->id() === $job->employer?->user_id)
-                            <form method="POST" action="{{ route('jobs.destroy', $job) }}" class="mt-4">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="rounded-lg border border-red-400/40 px-3 py-1 text-xs text-red-200 transition hover:bg-red-500/20">
-                                    Eliminar vaga
-                                </button>
-                            </form>
+                            <div class="mt-4 flex items-center gap-2">
+                                <a href="{{ route('jobs.edit', $job) }}" class="rounded-lg border border-blue-400/40 px-3 py-1 text-xs text-blue-200 transition hover:bg-blue-500/20">
+                                    Editar vaga
+                                </a>
+                                <form method="POST" action="{{ route('jobs.destroy', $job) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="rounded-lg border border-red-400/40 px-3 py-1 text-xs text-red-200 transition hover:bg-red-500/20">
+                                        Eliminar vaga
+                                    </button>
+                                </form>
+                            </div>
                         @endif
                     @endauth
                 </x-job-card-wide>

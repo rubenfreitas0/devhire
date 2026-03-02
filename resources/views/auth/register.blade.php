@@ -11,26 +11,6 @@
                 <x-forms.input label="Password" name="password" type="password" required autocomplete="new-password" />
                 <x-forms.input label="Confirmar Password" name="password_confirmation" type="password" required autocomplete="new-password" />
 
-                <x-forms.divider />
-
-                <x-forms.input label="Nome da Empresa" name="employer" required />
-                <x-forms.input
-                    label="Tags da vaga (separadas por virgula)"
-                    name="job_tags"
-                    placeholder="Laravel, Backend, React"
-                />
-
-                <x-forms.field label="Logotipo da Empresa" name="logo">
-                    <input
-                        id="logo"
-                        name="logo"
-                        type="file"
-                        accept="image/*"
-                        class="w-full rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-white file:mr-4 file:rounded-lg file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:font-semibold file:text-white file:transition hover:file:bg-blue-500"
-                    >
-                    <p class="mt-2 text-xs text-white/60">PNG, JPG ou WEBP ate 5MB.</p>
-                </x-forms.field>
-
                 <x-forms.button class="w-full py-3">Criar conta</x-forms.button>
             </x-forms.form>
 

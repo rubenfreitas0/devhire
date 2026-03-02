@@ -1,7 +1,14 @@
-<form {{ $attributes(["class" => "max-w-2xl mx-auto space-y-6", "method" => "GET"]) }}>
-    @if ($attributes->get('method', 'GET') !== 'GET')
+@php
+    $intendedMethod = strtoupper((string) $attributes->get('method', 'GET'));
+    $htmlMethod = $intendedMethod === 'GET' ? 'GET' : 'POST';
+@endphp
+
+<form method="{{ $htmlMethod }}" {{ $attributes->except('method')->class(["max-w-2xl mx-auto space-y-6"]) }}>
+    @if ($intendedMethod !== 'GET')
         @csrf
-        @method($attributes->get('method'))
+        @if ($intendedMethod !== 'POST')
+            @method($intendedMethod)
+        @endif
     @endif
 
     {{ $slot }}

@@ -2,37 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
-use App\Models\Tag;
 use App\Http\Requests\StoreJobRequest;
 use App\Http\Requests\UpdateJobRequest;
+use App\Models\Employer;
+use App\Models\Job;
+use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class JobController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    //Começa a ir buscar a consulta dos jobs mais recentes depois
+    //apresenta os 6 jobs de que são os primeiros 6 ids, depois
+    //junta o employer+tags para evitar o N+1 e queries duplicadas e
+    //no final envia tudo para a view jobs.index
     public function index(): View
     {
-        // Vai buscar a query mais recente
         $jobQuery = Job::query()
-            ->with(['employer', 'tags'])
             ->orderByDesc('created_at')
             ->orderByDesc('id');
 
-        return view('jobs.index', [
-            // 6 vagas/jobs por página
-            // wide_page para evitar conflito no url
-            'featuredJobs' => Job::query()
-                ->with(['employer', 'tags'])
-                ->orderBy('id')
-                ->limit(6)
-                ->get(),
-            'wideJobs' => (clone $jobQuery)->simplePaginate(6, ['*'], 'wide_page'),
+        $featuredJobs = Job::query()
+            ->orderBy('id')
+            ->limit(6)
+            ->get();
 
-            // Tags da barra de pesquisa/filtros
+        $wideJobs = (clone $jobQuery)->simplePaginate(6, ['*'], 'wide_page');
+
+        $jobsForRelations = $featuredJobs
+            ->concat($wideJobs->getCollection())
+            ->unique('id')
+            ->values();
+
+        $jobsForRelations->load(['employer', 'tags']);
+
+        return view('jobs.index', [
+            'featuredJobs' => $featuredJobs,
+            'wideJobs' => $wideJobs,
             'tags' => Tag::query()
                 ->orderBy('name')
                 ->get(),
@@ -42,20 +50,22 @@ class JobController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('jobs.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    //Cria uma nova vaga e garante que o utilizador.
+    //está autenticado, valida os dadose cria os registos
     public function store(StoreJobRequest $request): RedirectResponse
     {
         $user = $request->user();
-        $employer = $user?->employer;
+        abort_if(!$user, 403);
 
-        abort_if(!$employer, 403, 'Precisas de uma empresa associada para publicar vagas.');
+        $employer = $user->employer ?? $user->employers()->create([
+            'name' => $user->name,
+            'logo' => Employer::DEFAULT_LOGO,
+        ]);
 
         $attributes = $request->validated();
 
@@ -69,14 +79,7 @@ class JobController extends Controller
             'feature' => false,
         ]);
 
-        $tagIds = collect(explode(',', (string) ($attributes['tags'] ?? '')))
-            ->map(fn (string $tag) => trim($tag))
-            ->filter()
-            ->unique()
-            ->take(5)
-            ->map(fn (string $name) => Tag::query()->firstOrCreate(['name' => $name])->id)
-            ->values()
-            ->all();
+        $tagIds = $this->resolveTagIds($attributes['tags'] ?? null);
 
         if (count($tagIds) > 0) {
             $job->tags()->syncWithoutDetaching($tagIds);
@@ -85,6 +88,22 @@ class JobController extends Controller
         return redirect()->route('home');
     }
 
+    //Converte a string de tags recebida no formulario em IDs de tags.
+    private function resolveTagIds(?string $rawTags): array
+    {
+        $tagNames = collect(explode(',', (string) $rawTags))
+            ->map(fn (string $tag) => trim($tag))
+            ->filter()
+            ->unique()
+            ->take(5)
+            ->values();
+
+        return $tagNames
+            ->map(fn (string $name) => Tag::query()->firstOrCreate(['name' => $name])->id)
+            ->all();
+    }
+
+    
     /**
      * Display the specified resource.
      */
@@ -93,28 +112,43 @@ class JobController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Job $job)
+
+    //Verifica se o utilizador autenticado e o dono da vaga
+    //se nao for dono, bloqueia com erro 403 e caso seja dono
+    //tem permissão para editar/alerar.
+    public function edit(Job $job): View
     {
-        //
+        abort_unless(Auth::id() === $job->employer?->user_id, 403);
+
+        return view('jobs.edit', [
+            'job' => $job->load('tags'),
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateJobRequest $request, Job $job)
+    //
+    public function update(UpdateJobRequest $request, Job $job): RedirectResponse
     {
-        //
+        $attributes = $request->validated();
+
+        $job->update([
+            'title' => $attributes['title'],
+            'salary' => $attributes['salary'],
+            'location' => $attributes['location'],
+            'schedule' => $attributes['schedule'],
+            'url' => filled($attributes['url'] ?? null) ? $attributes['url'] : $job->url,
+        ]);
+
+        $tagIds = $this->resolveTagIds($attributes['tags'] ?? null);
+
+        $job->tags()->sync($tagIds);
+
+        return redirect()->route('home');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Job $job): RedirectResponse
     {
-        abort_unless(auth()->id() === $job->employer?->user_id, 403);
+        abort_unless(Auth::id() === $job->employer?->user_id, 403);
 
         $job->delete();
 

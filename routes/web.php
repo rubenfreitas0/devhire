@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SearchController;
@@ -13,13 +14,17 @@ Route::get('/results/{tag}', TagController::class)->name('tags.results');
 Route::get('/tags/{tag}', TagController::class);
 Route::get('/jobs/create', [JobController::class, 'create'])->middleware('auth')->name('jobs.create');
 Route::post('/jobs', [JobController::class, 'store'])->middleware('auth')->name('jobs.store');
+Route::get('/jobs/{job}/edit', [JobController::class, 'edit'])->middleware('auth')->name('jobs.edit');
+Route::patch('/jobs/{job}', [JobController::class, 'update'])->middleware('auth')->name('jobs.update');
 Route::delete('/jobs/{job}', [JobController::class, 'destroy'])->middleware('auth')->name('jobs.destroy');
+Route::get('/employers/{employer}/edit', [EmployerController::class, 'edit'])->middleware('auth')->name('employer.edit');
+Route::patch('/employers/{employer}', [EmployerController::class, 'update'])->middleware('auth')->name('employer.update');
 
 Route::middleware('guest')->group(function () {
-    Route::get('/register', [RegisteredUserController::class, 'create']);
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('/register', [RegisteredUserController::class, 'store']);
 
-    Route::get('/login', [SessionController::class, 'create']);
+    Route::get('/login', [SessionController::class, 'create'])->name('login');
     Route::post('/login', [SessionController::class, 'store']);
 });
 

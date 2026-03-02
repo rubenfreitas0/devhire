@@ -33,7 +33,7 @@
                     </form>
                 @else
                     <a class="site-nav-link" href="{{ route('jobs.create') }}">Postar vaga</a>
-                    <a class="site-nav-link" href="/login">Login</a>
+                    <a class="site-nav-cta" href="/login">Login</a>
                     <a class="site-nav-cta" href="/register">Registar</a>
                 @endauth
             </div>

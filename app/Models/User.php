@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -35,9 +37,15 @@ class User extends Authenticatable
     ];
 
 
-    public function employer()
+    public function employers(): HasMany
     {
-        return $this->hasOne(Employer::class);
+        return $this->hasMany(Employer::class);
+    }
+
+    // Compatibilidade para pontos que ainda esperam um employer unico.
+    public function employer(): HasOne
+    {
+        return $this->hasOne(Employer::class)->oldestOfMany();
     }
 
 
