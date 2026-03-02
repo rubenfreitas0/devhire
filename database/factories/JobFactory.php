@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Employer;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 
 /**
@@ -18,13 +18,29 @@ class JobFactory extends Factory
      */
     public function definition(): array
     {
+        $devRoles = [
+            'Junior Frontend Developer',
+            'Senior Frontend Developer',
+            'Junior Backend Developer',
+            'Senior Backend Developer',
+            'Full Stack Developer',
+            'Laravel Developer',
+            'PHP Developer',
+            'Node.js Developer',
+            'React Developer',
+            'Software Engineer',
+        ];
+
+        $annualSalaryUsd = fake()->numberBetween(45, 180) * 1000;
+
         return [
             'employer_id' => Employer::factory(),
-            'title' => fake()->jobTitle,
-            'salary' => fake()->numberBetween(30000, 100000),
-            'location' => fake()->city,
-            'schedule' => fake()->randomElement(['Full-time', 'Part-time', 'Contract']),
+            'title' => fake()->randomElement($devRoles),
+            'salary' => number_format($annualSalaryUsd, 0, ',', ' ') . ' USD/year',
+            'location' => fake()->randomElement(['Lisboa', 'Porto', 'Braga', 'Remote', 'Hibrido']),
+            'schedule' => fake()->randomElement(['full-time', 'part-time', 'contract']),
             'url' => fake()->url,
+            'feature' => fake()->boolean(30),
         ];
     }
 }

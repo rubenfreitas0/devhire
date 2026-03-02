@@ -1,5 +1,26 @@
 <?php
 
+use App\Http\Controllers\JobController;
+use App\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SessionController;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('home');
+Route::get('/', [JobController::class, 'index'])->name('home');
+Route::get('/search', SearchController::class)->name('jobs.search');
+Route::get('/results/{tag}', TagController::class)->name('tags.results');
+Route::get('/tags/{tag}', TagController::class);
+Route::get('/jobs/create', [JobController::class, 'create'])->middleware('auth')->name('jobs.create');
+Route::post('/jobs', [JobController::class, 'store'])->middleware('auth')->name('jobs.store');
+Route::delete('/jobs/{job}', [JobController::class, 'destroy'])->middleware('auth')->name('jobs.destroy');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisteredUserController::class, 'create']);
+    Route::post('/register', [RegisteredUserController::class, 'store']);
+
+    Route::get('/login', [SessionController::class, 'create']);
+    Route::post('/login', [SessionController::class, 'store']);
+});
+
+Route::delete('/logout', [SessionController::class, 'destroy'])->middleware('auth');

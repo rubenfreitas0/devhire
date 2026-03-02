@@ -1,44 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const input = document.getElementById('job-search-input');
-    if (!input) return;
+    document.documentElement.classList.add('js-enabled');
+    document.body.classList.add('is-loaded');
 
-    const clearButton = document.getElementById('job-search-clear');
-    const emptyState = document.getElementById('job-search-empty');
     const cards = Array.from(document.querySelectorAll('[data-job-card]'));
 
-    const normalize = (value) =>
-        value
-            .toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '');
+    cards.forEach((card, index) => {
+        card.classList.add('card-reveal');
+        card.style.setProperty('--stagger', `${index * 40}ms`);
+        card.style.transform = 'none';
+    });
 
-    const applyFilter = () => {
-        const query = normalize(input.value.trim());
-        let visibleCount = 0;
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    entry.target.style.transform = 'none';
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.15 },
+    );
 
-        cards.forEach((card) => {
-            const haystack = normalize(card.textContent || '');
-            const matches = query.length === 0 || haystack.includes(query);
-            card.style.display = matches ? '' : 'none';
-            if (matches) visibleCount += 1;
-        });
-
-        if (clearButton) {
-            clearButton.style.display = query.length ? '' : 'none';
-        }
-
-        if (emptyState) {
-            emptyState.style.display = visibleCount === 0 ? '' : 'none';
-        }
-    };
-
-    input.addEventListener('input', applyFilter);
-
-    if (clearButton) {
-        clearButton.addEventListener('click', () => {
-            input.value = '';
-            applyFilter();
-            input.focus();
-        });
-    }
+    cards.forEach((card) => observer.observe(card));
 });
