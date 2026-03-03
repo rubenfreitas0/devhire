@@ -6,6 +6,7 @@ use App\Models\Tag;
 
 class TagController extends Controller
 {
+    //Mostra os resultados de uma tag especifica.
     public function __invoke(Tag $tag)
     {
         $jobs = $tag->jobs()
@@ -14,7 +15,7 @@ class TagController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('results', [
+        return view('tags.results', [
             'tag' => $tag,
             'jobs' => $jobs,
         ]);

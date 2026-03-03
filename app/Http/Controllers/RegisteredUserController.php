@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,9 +25,7 @@ class RegisteredUserController extends Controller
         return view('auth.register');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    //Processa a validação e registo de um novo utilizador.
     public function store(Request $request)
     {
         $attributes = $request->validate([
@@ -47,10 +44,8 @@ class RegisteredUserController extends Controller
                 'password' => $attributes['password'],
             ]);
 
-            // Employer criado automaticamente para manter o fluxo de publicar vagas.
-            $user->employers()->create([
+            $user->employer()->create([
                 'name' => $attributes['name'],
-                'logo' => Employer::DEFAULT_LOGO,
             ]);
 
             return $user;

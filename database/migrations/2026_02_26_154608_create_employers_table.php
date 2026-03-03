@@ -19,7 +19,6 @@ return new class extends Migration
                 ->cascadeOnDelete()
                 ->unique();
             $table->string('name');
-            $table->string('logo');
             $table->timestamps();
         });
     }

@@ -4,7 +4,6 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -36,16 +35,9 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-
-    public function employers(): HasMany
-    {
-        return $this->hasMany(Employer::class);
-    }
-
-    // Compatibilidade para pontos que ainda esperam um employer unico.
     public function employer(): HasOne
     {
-        return $this->hasOne(Employer::class)->oldestOfMany();
+        return $this->hasOne(Employer::class);
     }
 
 
@@ -60,17 +52,5 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    /**
-     * Get the user's initials
-     */
-    public function initials(): string
-    {
-        return Str::of($this->name)
-            ->explode(' ')
-            ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
-            ->implode('');
     }
 }

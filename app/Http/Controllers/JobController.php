@@ -4,18 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreJobRequest;
 use App\Http\Requests\UpdateJobRequest;
-use App\Models\Employer;
 use App\Models\Job;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+
+
 
 class JobController extends Controller
 {
 
     //Começa a ir buscar a consulta dos jobs mais recentes depois
-    //apresenta os 6 jobs de que são os primeiros 6 ids, depois
+    //apresenta os 6 jobs de que são os primeiros 6 ids,
     //junta o employer+tags para evitar o N+1 e queries duplicadas e
     //no final envia tudo para a view jobs.index
     public function index(): View
@@ -56,15 +56,14 @@ class JobController extends Controller
     }
 
     //Cria uma nova vaga e garante que o utilizador.
-    //está autenticado, valida os dadose cria os registos
+    //está autenticado, valida os dados e cria os registos
     public function store(StoreJobRequest $request): RedirectResponse
     {
         $user = $request->user();
         abort_if(!$user, 403);
 
-        $employer = $user->employer ?? $user->employers()->create([
+        $employer = $user->employer ?? $user->employer()->create([
             'name' => $user->name,
-            'logo' => Employer::DEFAULT_LOGO,
         ]);
 
         $attributes = $request->validated();
@@ -113,19 +112,17 @@ class JobController extends Controller
     }
 
 
-    //Verifica se o utilizador autenticado e o dono da vaga
-    //se nao for dono, bloqueia com erro 403 e caso seja dono
-    //tem permissão para editar/alerar.
+    //Edita uma vaga existente
     public function edit(Job $job): View
     {
-        abort_unless(Auth::id() === $job->employer?->user_id, 403);
+            $this->authorize('update', $job);
 
-        return view('jobs.edit', [
+            return view('jobs.edit', [
             'job' => $job->load('tags'),
         ]);
     }
 
-    //
+    //Atualiza uma vaga existente com dados validados.
     public function update(UpdateJobRequest $request, Job $job): RedirectResponse
     {
         $attributes = $request->validated();
@@ -145,10 +142,10 @@ class JobController extends Controller
         return redirect()->route('home');
     }
 
-
+    //Remove uma vaga existente.
     public function destroy(Job $job): RedirectResponse
     {
-        abort_unless(Auth::id() === $job->employer?->user_id, 403);
+        $this->authorize('delete', $job);
 
         $job->delete();
 

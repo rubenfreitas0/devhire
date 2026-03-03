@@ -12,6 +12,7 @@ class SessionController extends Controller
         return view('auth.login');
     }
 
+    //Validação do login
     public function store()
     {
         $attributes = request()->validate([
@@ -21,7 +22,7 @@ class SessionController extends Controller
 
         if (!Auth::attempt($attributes)) {
             throw ValidationException::withMessages([
-                'email' => 'Sorry, those credentials do not match.',
+                'email' => 'Desculpe, as credenciais estão incorretas.',
             ]);
         }
 

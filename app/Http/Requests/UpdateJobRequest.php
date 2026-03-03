@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Job;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateJobRequest extends FormRequest
 {
@@ -13,7 +15,9 @@ class UpdateJobRequest extends FormRequest
     {
         $job = $this->route('job');
 
-        return auth()->check() && $job && auth()->id() === $job->employer?->user_id;
+        return Auth::check()
+            && $job instanceof Job
+            && Auth::id() === $job->employer?->user_id;
     }
 
     /**

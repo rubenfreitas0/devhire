@@ -1,7 +1,7 @@
 <x-layout>
     <section class="mx-auto w-full max-w-xl py-6 pb-28 md:pb-40">
         <div class="rounded-3xl border border-white/15 bg-gradient-to-b from-white/[0.08] to-white/[0.03] p-8 shadow-2xl backdrop-blur-sm">
-            <p class="mb-3 text-center text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200/85">New Account</p>
+            <p class="mb-3 text-center text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200/85">Nova Conta</p>
             <x-page-heading class="mb-2 text-3xl">Registar</x-page-heading>
             <p class="mb-7 text-center text-sm text-white/70">Cria a tua conta e comeca a publicar vagas.</p>
 

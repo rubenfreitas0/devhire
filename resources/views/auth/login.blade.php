@@ -1,7 +1,7 @@
 <x-layout>
     <section class="mx-auto w-full max-w-md py-6 pb-16 md:pb-24">
         <div class="rounded-3xl border border-white/15 bg-gradient-to-b from-white/[0.08] to-white/[0.03] p-8 shadow-2xl backdrop-blur-sm">
-            <p class="mb-3 text-center text-xs font-semibold uppercase tracking-[0.18em] text-blue-200/85">Welcome Back</p>
+            <p class="mb-3 text-center text-xs font-semibold uppercase tracking-[0.18em] text-blue-200/85">Bem-vindo de volta</p>
             <x-page-heading class="mb-2 text-3xl">Entrar</x-page-heading>
             <p class="mb-7 text-center text-sm text-white/70">Acede a tua conta para continuar.</p>
 

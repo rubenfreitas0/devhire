@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
+    //Pesquisa vagas por termo (titulo, localizacao, empresa e tags) e
+    //se houver termo aplica filtro e depois ordena por mais recentes
     public function __invoke(Request $request)
     {
         $q = trim((string) $request->query('q', ''));

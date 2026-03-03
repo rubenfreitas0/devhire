@@ -8,11 +8,6 @@
                 <x-job-card data-job-card>
                     <div class="mb-4 flex items-center justify-between gap-3">
                         <p class="text-sm text-white/75">{{ $job->employer?->name ?? 'Empresa sem nome' }}</p>
-                        <img
-                            src="{{ $job->employer ? $job->employer->logoUrl(42) : 'https://api.dicebear.com/9.x/initials/svg?seed=Employer&size=42&radius=50' }}"
-                            alt="Logo da empresa"
-                            class="h-10 w-10 rounded-full border border-white/20 object-cover"
-                        >
                     </div>
 
                     <div class="mb-6">
@@ -67,17 +62,12 @@
         <div class="mt-8 space-y-8">
             @forelse ($wideJobs as $job)
                 <x-job-card-wide data-job-card>
-                    <div class="flex items-start justify-between gap-4">
+                    <div class="flex items-start gap-4">
                         <div class="min-w-0">
                             <p class="text-sm text-white/75">{{ $job->employer?->name ?? 'Empresa sem nome' }}</p>
                             <h3 class="mt-1 text-2xl font-semibold text-white">{{ $job->title }}</h3>
                             <p class="mt-2 text-sm text-white/70">{{ $job->schedule }} - {{ $job->salary }}</p>
                         </div>
-                        <img
-                            src="{{ $job->employer ? $job->employer->logoUrl(56) : 'https://api.dicebear.com/9.x/initials/svg?seed=Employer&size=56&radius=50' }}"
-                            alt="Logo da empresa"
-                            class="h-14 w-14 rounded-full border border-white/20 object-cover"
-                        >
                     </div>
                     <div class="mt-4 grid gap-2 text-sm text-white/75 md:grid-cols-3">
                         <p><span class="text-white/55">Local:</span> {{ $job->location }}</p>
