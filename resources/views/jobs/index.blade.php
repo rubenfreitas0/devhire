@@ -74,7 +74,7 @@
                         <p><span class="text-white/55">Tipo:</span> {{ $job->schedule }}</p>
                         <p>
                             <span class="text-white/55">Candidatura:</span>
-                            <a class="underline hover:text-white" href="{{ $job->url }}" target="_blank" rel="noopener noreferrer">Abrir vaga</a>
+                            <a class="underline hover:text-white" href="{{ route('jobs.show', $job) }}">Abrir vaga</a>
                         </p>
                     </div>
                     <div class="mt-4 flex flex-wrap gap-2">
@@ -128,4 +128,3 @@
         </div>
     </section>
 </x-layout>
-

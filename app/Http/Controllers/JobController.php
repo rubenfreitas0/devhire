@@ -67,7 +67,7 @@ class JobController extends Controller
         ]);
 
         $attributes = $request->validated();
-
+        
         $job = Job::query()->create([
             'employer_id' => $employer->id,
             'title' => $attributes['title'],
@@ -106,9 +106,11 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Job $job)
+    public function show(Job $job): View
     {
-        //
+        return view('jobs.show', [
+            'job' => $job->load(['employer', 'tags']),
+        ]);
     }
 
 
