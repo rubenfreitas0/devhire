@@ -18,10 +18,10 @@
                 </a>
             </div>
             <div class="site-nav-links">
-                <a class="site-nav-link" href="">Vagas</a>
-                <a class="site-nav-link" href="">Carreiras</a>
-                <a class="site-nav-link" href="">Salarios</a>
-                <a class="site-nav-link" href="">Empresas</a>
+                <a class="site-nav-link" href="{{ route('home') }}">Vagas</a>
+                <a class="site-nav-link" href="{{ route('pages.carreiras') }}">Carreiras</a>
+                <a class="site-nav-link" href="{{ route('pages.salarios') }}">Salarios</a>
+                <a class="site-nav-link" href="{{ route('pages.empresas') }}">Empresas</a>
             </div>
             <div class="flex items-center gap-2">
                 @auth

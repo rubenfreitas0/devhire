@@ -95,7 +95,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="rounded-lg border border-red-400/40 px-3 py-1 text-xs text-red-200 transition hover:bg-red-500/20">
-                                        Eliminar vaga
+                                        Eliminar Vaga
                                     </button>
                                 </form>
                             </div>
