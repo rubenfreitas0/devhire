@@ -54,7 +54,9 @@
                     @endauth
                 </x-job-card-wide>
             @empty
-                <p class="text-sm text-white/70">Sem resultados para "{{ $q }}".</p>
+                <p class="text-sm text-white/70">
+                    {{ $q !== '' ? 'Sem resultados para "'.$q.'".' : 'Sem resultados para os filtros selecionados.' }}
+                </p>
             @endforelse
         </div>
 

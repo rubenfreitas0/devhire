@@ -33,6 +33,7 @@
                 </a>
             @endif
         </div>
+
     </form>
 
     <p class="mt-2 text-xs text-white/60">Filtra por empresa, cargo, local e tags.</p>

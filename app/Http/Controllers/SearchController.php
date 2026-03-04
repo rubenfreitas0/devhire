@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class SearchController extends Controller
 {
     //Pesquisa vagas por termo (titulo, localizacao, empresa e tags) e
     //se houver termo aplica filtro e depois ordena por mais recentes
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): View
     {
         $q = trim((string) $request->query('q', ''));
 
